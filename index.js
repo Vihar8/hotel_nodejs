@@ -27,7 +27,7 @@ app.use('/menu', menuItemRoutes);
 // Additional CORS configuration
 app.use(
 	cors({
-		origin:"http://localhost:4002", // Allow requests from this origin (adjust the URL as per your frontend)
+		origin:"https://vimo-restaurant.vercel.app", // Allow requests from this origin (adjust the URL as per your frontend)
 		credentials:true, // Allow credentials (cookies, authorization headers) to be included in requests
 	})
 )
