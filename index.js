@@ -18,11 +18,12 @@ const PORT = process.env.PORT || 3000;
 // routes files import
 const personRoutes = require('./routes/personRoutes'); // Import routes related to 'person' (ensure the file exists)
 const menuItemRoutes = require('./routes/menuRoutes'); // Import routes related to 'menu' (ensure the file exists)
-
+const userRoutes = require('./routes/userRoutes');
 
 // Register the imported routes
 app.use('/person', personRoutes);
 app.use('/menu', menuItemRoutes);
+app.use('/register', userRoutes);
 
 // Additional CORS configuration
 app.use(
