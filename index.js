@@ -3,8 +3,12 @@
 const express = require ("express"); // Import Express framework
 var cors = require('cors') // Import CORS middleware to enable cross-origin requests
 const app = express(); // Create an instance of Express
-const db = require('./db'); // Import your database configuration (make sure this file exists and is correctly set up)
+const db = require('./db'); 
+const Passport = require('passport');// Import your database configuration (make sure this file exists and is correctly set up)
 require('dotenv').config();
+const passport = require('./auth'); // Ensure this path is correct
+
+
 
 // Middleware to handle CORS
 app.use(cors()) // Allow all origins by default
@@ -15,14 +19,13 @@ app.use(bodyParser.json()); // req.body me store karega data // This will parse 
 
 const PORT = process.env.PORT || 3000;
 
-// routes files import
-const personRoutes = require('./routes/personRoutes'); // Import routes related to 'person' (ensure the file exists)
-const menuItemRoutes = require('./routes/menuRoutes'); // Import routes related to 'menu' (ensure the file exists)
+// middle ware function
+const logRequest = (req, res, next) => {
+	console.log(`${new Date ().toLocaleString()} Request Made to: ${req.originalUrl}`);
+	next(); // move to next phase
 
+}
 
-// Register the imported routes
-app.use('/person', personRoutes);
-app.use('/menu', menuItemRoutes);
 
 // Additional CORS configuration
 app.use(
@@ -31,10 +34,23 @@ app.use(
 		credentials:true, // Allow credentials (cookies, authorization headers) to be included in requests
 	})
 )
+app.use(logRequest);
+
+app.use(Passport.initialize());
+const localAuthMiddleware = passport.authenticate('local', {session: false})
 
 app.get('/', function (req, res) {
     res.send('Welcome to my Restaurant'); // Add a response to the client
 });
+
+// routes files import
+const personRoutes = require('./routes/personRoutes'); // Import routes related to 'person' (ensure the file exists)
+const menuItemRoutes = require('./routes/menuRoutes'); // Import routes related to 'menu' (ensure the file exists)
+
+
+// Register the imported routes
+app.use('/person', personRoutes);
+app.use('/menu', menuItemRoutes);
 
 
 // Start the server on port 3000
